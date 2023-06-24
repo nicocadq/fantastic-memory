@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Escape Mission - The Game</title>
     <style>
       /* CSS styling goes here */
@@ -10,69 +10,167 @@
   </head>
   <body>
     <h1>Escape Mission - The Game</h1>
-    
+
     <!-- Survey Section -->
     <section id="survey">
       <h2>Take the Survey</h2>
-      <p>Please answer the following questions to assign you a role in the game:</p>
-      
+      <p>
+        Please answer the following questions to assign you a role in the game:
+      </p>
+
       <!-- Survey questions -->
       <form id="survey-form">
         <label for="likes">What are your likes or hobbies?</label>
         <textarea id="likes" name="likes" required></textarea>
-        
+
         <label for="opinions">What is your opinion on different topics?</label>
         <textarea id="opinions" name="opinions" required></textarea>
-        
+
         <label for="birthdate">Enter your birthdate:</label>
-        <input type="date" id="birthdate" name="birthdate" required>
-        
+        <input type="date" id="birthdate" name="birthdate" required />
+
+        <!-- Additional questions go here -->
+        <label for="characteristic">Choose one characteristic:</label>
+        <select id="characteristic" name="characteristic" required>
+          <option value="">Select an option</option>
+          <option value="brave">Brave</option>
+          <option value="wise">Wise</option>
+          <option value="mysterious">Mysterious</option>
+          <option value="strong">Strong</option>
+          <option value="clever">Clever</option>
+          <!-- Add more characteristics -->
+        </select>
+
         <button type="submit">Submit</button>
       </form>
+      <p id="assigned-character"></p>
     </section>
-    
+
     <!-- Sign-up Section -->
-    <section id="signup" style="display: none;">
+    <section id="signup" style="display: none">
       <h2>Sign-up</h2>
       <p>Enter a nickname to sign-up and start playing:</p>
-      
+
       <!-- Sign-up form -->
       <form id="signup-form">
         <label for="nickname">Nickname:</label>
-        <input type="text" id="nickname" name="nickname" required>
-        
+        <input type="text" id="nickname" name="nickname" required />
+
         <label for="accept-terms">
-          <input type="checkbox" id="accept-terms" name="accept-terms" required>
-          I have read and accept the <a href="#instructions">Instructions</a> and <a href="#guide">How to Play</a> guide.
+          <input
+            type="checkbox"
+            id="accept-terms"
+            name="accept-terms"
+            required
+          />
+          I have read and accept the
+          <a href="#instructions">Instructions</a> and
+          <a href="#guide">How to Play</a> guide.
         </label>
-        
+
         <button type="submit">Start Playing</button>
       </form>
     </section>
-    
+
     <!-- Instructions Section -->
     <section id="instructions">
       <h2>Instructions</h2>
       <p>Here you will find the instructions for the game.</p>
       <!-- Game instructions go here -->
     </section>
-    
+
     <!-- How to Play Section -->
     <section id="guide">
       <h2>How to Play</h2>
       <p>Here you will find the guide on how to play the game.</p>
       <!-- How to play guide goes here -->
     </section>
-    
+
     <!-- In-person Player Package Section -->
     <section id="player-package">
       <h2>In-person Player Package</h2>
-      <p>As an in-person player, please collect your player package containing tools for the upcoming challenges.</p>
+      <p>
+        As an in-person player, please collect your player package containing
+        tools for the upcoming challenges.
+      </p>
       <!-- Package contents and instructions go here -->
     </section>
-    
+
     <script>
-      // JavaScript functionality goes here
+      let participantsCount = 0;
+
+      document
+        .getElementById("survey-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const likes = document.getElementById("likes").value;
+          const opinions = document.getElementById("opinions").value;
+          const birthdate = document.getElementById("birthdate").value;
+          const characteristic =
+            document.getElementById("characteristic").value;
+
+          // Definir personajes y sus atributos
+          const characters = [
+            { name: "Zeus", mythology: "Greek", characteristic: "brave" },
+            { name: "Poseidón", mythology: "Greek", characteristic: "wise" },
+            { name: "Atenea", mythology: "Greek", characteristic: "clever" },
+            {
+              name: "Afrodita",
+              mythology: "Greek",
+              characteristic: "mysterious",
+            },
+            { name: "Ares", mythology: "Greek", characteristic: "strong" },
+            { name: "Thor", mythology: "Norse", characteristic: "strong" },
+            { name: "Loki", mythology: "Norse", characteristic: "mysterious" },
+            { name: "Freyja", mythology: "Norse", characteristic: "brave" },
+            { name: "Odin", mythology: "Norse", characteristic: "wise" },
+            { name: "Anubis", mythology: "Egyptian", characteristic: "wise" },
+            { name: "Horus", mythology: "Egyptian", characteristic: "brave" },
+            { name: "Isis", mythology: "Egyptian", characteristic: "clever" },
+            {
+              name: "Osiris",
+              mythology: "Egyptian",
+              characteristic: "mysterious",
+            },
+            { name: "Kali", mythology: "Hindu", characteristic: "mysterious" },
+            { name: "Vishnu", mythology: "Hindu", characteristic: "wise" },
+            // Agrega más personajes y sus atributos aquí
+          ];
+
+          // Filtrar personajes disponibles basados en las respuestas
+          const availableCharacters = characters.filter(function (character) {
+            return character.characteristic === characteristic;
+          });
+
+          // Verificar si hay suficientes personajes para asignar a todos los participantes
+          if (availableCharacters.length >= participantsCount) {
+            const assignedCharacterIndex = getRandomInt(
+              availableCharacters.length
+            ); // Obtener un índice aleatorio
+            const assignedCharacter =
+              availableCharacters[assignedCharacterIndex].name; // Asignar el personaje correspondiente
+            participantsCount++;
+            document.getElementById(
+              "assigned-character"
+            ).textContent = `Personaje asignado: ${assignedCharacter}`;
+            availableCharacters.splice(assignedCharacterIndex, 1); // Eliminar el personaje asignado de la lista de disponibles
+            document.getElementById(
+              "survey"
+            ).style.display = `none`; /* Ocultar la sección de encuesta */
+            document.getElementById(
+              "signup"
+            ).style.display = `block`; /* Mostrar la sección de registro */
+          } else {
+            alert(
+              "No hay suficientes personajes disponibles para todos los participantes."
+            );
+          }
+        });
+
+      // Función auxiliar para obtener un número entero aleatorio entre 0 y max (exclusivo)
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
     </script>
-</body>
+  </body>
 </html>
